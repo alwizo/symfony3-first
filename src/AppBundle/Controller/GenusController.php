@@ -17,6 +17,6 @@ class GenusController extends Controller
 	{
 		$templating = $this->container->get('templating');
 		$html = $templating->render('genus/show.html.twig', ['name' => $genusName]);
-		return new Response('Genus name: '.$genusName);
+		return new Response($html);
 	}
 }
