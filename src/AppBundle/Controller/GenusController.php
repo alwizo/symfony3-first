@@ -14,7 +14,15 @@ class GenusController extends Controller {
 	 */
 	public function showAction( $genusName ) {
 		$fanFact = 'Octopuses can change the color of their body in just *three-tenths* of a second!';
-		$fanFact = $this->get('markdown.parser')->transform($fanFact);
+		$cache = $this->get('doctrine_cache.providers.my_markdown_cache');
+		$key = md5($fanFact);
+		if($cache->contains($key)) {
+			$fanFact = $cache->fetch($key);
+		}else{
+			sleep(1);
+			$fanFact = $this->get('markdown.parser')->transform($fanFact);
+			$cache->save($key,$fanFact);
+		}
 		return $this->render( 'genus/show.html.twig', array(
 			'name' => $genusName,
 			'fanFact' => $fanFact,
